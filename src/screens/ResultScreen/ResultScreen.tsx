@@ -103,6 +103,7 @@ export default function ResultScreen(): JSX.Element {
               Review in 2 days
             </div>
           )
+        </div>
           }
         {/* Main Content - Different layouts for correct vs incorrect */}
         {isCorrect ? (
