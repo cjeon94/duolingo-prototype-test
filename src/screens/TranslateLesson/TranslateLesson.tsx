@@ -136,7 +136,6 @@ export default function TranslateLesson(): JSX.Element {
                 type="text"
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Ana, como estas?"
                 className="w-full h-14 px-4 pr-14 text-lg border-2 border-[#e4e4e4] rounded-xl bg-white shadow-sm focus:border-[#1cb0f6] focus:outline-none transition-colors"
               />
               <button
