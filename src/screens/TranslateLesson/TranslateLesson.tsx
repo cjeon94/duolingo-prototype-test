@@ -6,6 +6,7 @@ export default function TranslateLesson(): JSX.Element {
   const navigate = useNavigate();
   const [answer, setAnswer] = React.useState("");
   const [isListening, setIsListening] = React.useState(false);
+  const recognitionRef = React.useRef<SpeechRecognition | null>(null);
   
   const duoCharacters = [
     "/Duo Character 1.svg",
