@@ -103,8 +103,6 @@ export default function ResultScreen(): JSX.Element {
               Review in 2 days
             </div>
           )}
-        </div>
-          
         {/* Main Content - Different layouts for correct vs incorrect */}
         {isCorrect ? (
           <div className="flex flex-col items-center justify-center h-[600px] px-6">
