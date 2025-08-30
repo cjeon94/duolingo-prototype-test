@@ -130,23 +130,6 @@ export default function TranslateLesson(): JSX.Element {
           </div>
 
           {/* Text Input with Mic */}
-          <div className="mb-8">
-            <div className="relative">
-              <input
-                type="text"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                placeholder="Ana, como estas?"
-                className="w-full h-14 px-4 pr-14 text-lg border-2 border-[#e4e4e4] rounded-xl bg-white shadow-sm focus:border-[#1cb0f6] focus:outline-none transition-colors"
-              />
-              <button
-                onClick={handleMicClick}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-[#1cb0f6] rounded-full flex items-center justify-center shadow-sm hover:bg-[#1a9de6] transition-colors"
-              >
-                <Mic className="w-4 h-4 text-white" />
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Footer Bar */}
