@@ -7,6 +7,7 @@ export default function TranslateLesson(): JSX.Element {
   const [answer, setAnswer] = React.useState("");
   const [isListening, setIsListening] = React.useState(false);
   const recognitionRef = React.useRef<SpeechRecognition | null>(null);
+  const recognitionRef = React.useRef<SpeechRecognition | null>(null);
   
   const duoCharacters = [
     "/Duo Character 1.svg",
@@ -42,6 +43,15 @@ export default function TranslateLesson(): JSX.Element {
       }
     };
   }, []);
+
+  // Cleanup speech recognition on unmount
+  React.useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
   const normalizeText = (text: string): string => {
     return text
       .toLowerCase()
@@ -65,6 +75,13 @@ export default function TranslateLesson(): JSX.Element {
   };
 
   const handleMicClick = () => {
+    // If already listening, stop the current session
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+      return;
+    }
+
     // If currently listening, stop the recognition
     if (isListening && window.currentRecognition) {
       window.currentRecognition.stop();
@@ -79,6 +96,7 @@ export default function TranslateLesson(): JSX.Element {
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
     
     recognition.lang = 'es-ES'; // Spanish language
     recognition.interimResults = true;
@@ -109,24 +127,24 @@ export default function TranslateLesson(): JSX.Element {
       
       // Only stop listening when we have a final result
       if (finalTranscript) {
+        recognition.stop();
         setIsListening(false);
       }
     };
 
     recognition.onerror = (event) => {
-      console.error('Speech recognition error:', event.error);
       setIsListening(false);
+      recognitionRef.current = null;
       if (event.error === 'no-speech') {
         alert('No speech detected. Please try again.');
       } else if (event.error === 'not-allowed') {
         alert('Microphone access denied. Please allow microphone access and try again.');
-      } else if (event.error === 'aborted') {
-        alert('Speech recognition was interrupted. Please try again.');
       }
     };
 
     recognition.onend = () => {
       setIsListening(false);
+      recognitionRef.current = null;
       window.currentRecognition = null;
     };
 
