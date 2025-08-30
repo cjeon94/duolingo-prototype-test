@@ -86,6 +86,16 @@ export default function ResultScreen(): JSX.Element {
           <div className="flex-1 h-3 bg-[#e5e7eb] rounded-full overflow-hidden">
             <div className="w-3/5 h-full bg-[#58cc02] rounded-full"></div>
           </div>
+        </div>
+
+        {/* Level Badge with Review Tag */}
+        <div className="flex items-center justify-between px-6 mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-[#ce82ff] rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-sm">6</span>
+            </div>
+            <span className="text-[#ce82ff] font-bold text-sm tracking-wider">LEVEL 6</span>
+          </div>
           
           {/* Review Tag for Incorrect Answers */}
           {!isCorrect && (
@@ -94,9 +104,6 @@ export default function ResultScreen(): JSX.Element {
             </div>
           )}
         </div>
-
-        {/* Level Badge */}
-        <div className="flex items-center gap-3 px-6 mb-8">
           <div className="w-8 h-8 bg-[#ce82ff] rounded-full flex items-center justify-center">
             <span className="text-white font-bold text-sm">6</span>
           </div>
