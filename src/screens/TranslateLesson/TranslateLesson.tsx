@@ -60,7 +60,8 @@ export default function TranslateLesson(): JSX.Element {
       navigate("/lesson/result?state=correct");
     } else {
       const encodedExpected = encodeURIComponent(correctAnswer);
-      navigate(`/lesson/result?state=incorrect&expected=${encodedExpected}`);
+      const encodedAnswer = encodeURIComponent(answer);
+      navigate(`/lesson/result?state=incorrect&expected=${encodedExpected}&answer=${encodedAnswer}`);
     }
   };
 
