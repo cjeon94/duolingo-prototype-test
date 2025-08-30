@@ -102,9 +102,9 @@ export default function ResultScreen(): JSX.Element {
             <div className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
               Review in 2 days
             </div>
-          )
+          )}
         </div>
-          }
+          
         {/* Main Content - Different layouts for correct vs incorrect */}
         {isCorrect ? (
           <div className="flex flex-col items-center justify-center h-[600px] px-6">
