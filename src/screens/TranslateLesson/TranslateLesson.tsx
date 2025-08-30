@@ -93,6 +93,9 @@ export default function TranslateLesson(): JSX.Element {
             <span className="text-white font-bold text-sm">6</span>
           </div>
           <span className="text-[#ce82ff] font-bold text-sm tracking-wider">LEVEL 6</span>
+          <div className="bg-gradient-to-r from-[#ff6b6b] to-[#ff8e53] text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+            More advanced!
+          </div>
         </div>
 
         {/* Main Content */}
