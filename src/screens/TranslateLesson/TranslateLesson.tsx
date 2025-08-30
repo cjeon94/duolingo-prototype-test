@@ -5,6 +5,7 @@ import { Mic } from "lucide-react";
 export default function TranslateLesson(): JSX.Element {
   const navigate = useNavigate();
   const [answer, setAnswer] = React.useState("");
+  const [isListening, setIsListening] = React.useState(false);
   
   const duoCharacters = [
     "/Duo Character 1.svg",
@@ -55,7 +56,43 @@ export default function TranslateLesson(): JSX.Element {
   };
 
   const handleMicClick = () => {
-    console.log("record");
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Speech recognition is not supported in this browser. Please try Chrome or Edge.');
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    
+    recognition.lang = 'es-ES'; // Spanish language
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setAnswer(transcript);
+      setIsListening(false);
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+      if (event.error === 'no-speech') {
+        alert('No speech detected. Please try again.');
+      } else if (event.error === 'not-allowed') {
+        alert('Microphone access denied. Please allow microphone access and try again.');
+      }
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   return (
@@ -141,9 +178,13 @@ export default function TranslateLesson(): JSX.Element {
               />
               <button
                 onClick={handleMicClick}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-[#1cb0f6] rounded-full flex items-center justify-center shadow-sm hover:bg-[#1a9de6] transition-colors"
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition-all ${
+                  isListening 
+                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
+                    : 'bg-[#1cb0f6] hover:bg-[#1a9de6]'
+                }`}
               >
-                <Mic className="w-4 h-4 text-white" />
+                <Mic className={`w-4 h-4 text-white ${isListening ? 'animate-pulse' : ''}`} />
               </button>
             </div>
           </div>
