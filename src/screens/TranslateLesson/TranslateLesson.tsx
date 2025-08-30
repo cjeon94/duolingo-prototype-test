@@ -102,6 +102,7 @@ export default function TranslateLesson(): JSX.Element {
     };
 
     recognition.onend = () => {
+    }
     recognition.start();
   };
 
