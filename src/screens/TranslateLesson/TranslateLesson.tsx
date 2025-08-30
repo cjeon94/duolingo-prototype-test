@@ -65,7 +65,7 @@ export default function TranslateLesson(): JSX.Element {
     const recognition = new SpeechRecognition();
     
     recognition.lang = 'es-ES'; // Spanish language
-    recognition.interimResults = false;
+    recognition.interimResults = true;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
@@ -73,9 +73,25 @@ export default function TranslateLesson(): JSX.Element {
     };
 
     recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setAnswer(transcript);
-      setIsListening(false);
+      let finalTranscript = '';
+      let interimTranscript = '';
+      
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      
+      // Update the input with both final and interim results
+      setAnswer(finalTranscript + interimTranscript);
+      
+      // Only stop listening when we have a final result
+      if (finalTranscript) {
+        setIsListening(false);
+      }
     };
 
     recognition.onerror = (event) => {
