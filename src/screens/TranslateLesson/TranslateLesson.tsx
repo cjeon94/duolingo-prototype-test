@@ -85,6 +85,8 @@ export default function TranslateLesson(): JSX.Element {
         alert('No speech detected. Please try again.');
       } else if (event.error === 'not-allowed') {
         alert('Microphone access denied. Please allow microphone access and try again.');
+      } else if (event.error === 'aborted') {
+        alert('Speech recognition was interrupted. Please try again.');
       }
     };
 
