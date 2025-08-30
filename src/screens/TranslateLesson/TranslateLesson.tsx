@@ -33,14 +33,6 @@ export default function TranslateLesson(): JSX.Element {
     return () => clearTimeout(timer);
   }, []);
 
-  // Cleanup speech recognition on unmount
-  React.useEffect(() => {
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-    };
-  }, []);
   const normalizeText = (text: string): string => {
     return text
       .toLowerCase()
@@ -64,13 +56,6 @@ export default function TranslateLesson(): JSX.Element {
   };
 
   const handleMicClick = () => {
-    // If already listening, stop the current session
-    if (isListening && recognitionRef.current) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-      return;
-    }
-
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert('Speech recognition is not supported in this browser. Please try Chrome or Edge.');
       return;
@@ -83,26 +68,30 @@ export default function TranslateLesson(): JSX.Element {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    // Store reference to current recognition instance
-    window.currentRecognition = recognition;
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
 
     recognition.onresult = (event) => {
       const transcript = event.results[0][0].transcript;
       setAnswer(transcript);
+      setIsListening(false);
     };
 
     recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
       if (event.error === 'no-speech') {
         alert('No speech detected. Please try again.');
       } else if (event.error === 'not-allowed') {
         alert('Microphone access denied. Please allow microphone access and try again.');
-      } else {
-        console.error('Speech recognition error:', event.error);
       }
     };
 
     recognition.onend = () => {
-    }
+      setIsListening(false);
+    };
+
     recognition.start();
   };
 
@@ -189,9 +178,13 @@ export default function TranslateLesson(): JSX.Element {
               />
               <button
                 onClick={handleMicClick}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-[#1cb0f6] rounded-full flex items-center justify-center shadow-sm hover:bg-[#1a9de6] transition-colors"
+                className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center shadow-sm transition-all ${
+                  isListening 
+                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
+                    : 'bg-[#1cb0f6] hover:bg-[#1a9de6]'
+                }`}
               >
-                <Mic className="w-4 h-4 text-white" />
+                <Mic className={`w-4 h-4 text-white ${isListening ? 'animate-pulse' : ''}`} />
               </button>
             </div>
           </div>
