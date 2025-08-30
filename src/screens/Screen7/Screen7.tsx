@@ -1,10 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Screen7Props {
   onResponse: (skipToAdvanced: boolean) => void;
 }
 
 export default function Screen7({ onResponse }: Screen7Props): JSX.Element {
+  const navigate = useNavigate();
+
+  const handleSkipAhead = () => {
+    navigate("/lesson/translate");
+  };
+
+  const handleKeepLearning = () => {
+    onResponse(false);
+  };
+
   return (
     <div className="absolute inset-0 bg-[#000000b2] z-50 flex items-center justify-center p-4">
       {/* Centered Modal */}
@@ -28,7 +39,7 @@ export default function Screen7({ onResponse }: Screen7Props): JSX.Element {
         {/* Two-Column Button Grid */}
         <div className="grid grid-cols-2 gap-3">
          <button
-  onClick={() => onResponse(false)}
+  onClick={handleKeepLearning}
   className="h-12 rounded-xl border-2 border-gray-300 bg-white 
              shadow-[0_3px_0_#d1d5db] text-gray-600 
              active:translate-y-[2px] active:shadow-none 
@@ -42,7 +53,7 @@ export default function Screen7({ onResponse }: Screen7Props): JSX.Element {
 </button>
           
           <button
-            onClick={() => onResponse(true)}
+            onClick={handleSkipAhead}
             className="h-12 rounded-xl text-white active:translate-y-[2px] transition-all bg-[#2ec748] shadow-[0_3px_0_#27aa3d] text-sm font-global-tokens-headings-h-7 font-[number:var(--global-tokens-headings-h-7-font-weight)] tracking-[var(--global-tokens-headings-h-7-letter-spacing)] [font-style:var(--global-tokens-headings-h-7-font-style)]"
           >
             YES, SKIP<br/>AHEAD
