@@ -5,7 +5,6 @@ import { Mic } from "lucide-react";
 export default function TranslateLesson(): JSX.Element {
   const navigate = useNavigate();
   const [answer, setAnswer] = React.useState("");
-  const [isListening, setIsListening] = React.useState(false);
   
   const duoCharacters = [
     "/Duo Character 1.svg",
@@ -33,14 +32,6 @@ export default function TranslateLesson(): JSX.Element {
     return () => clearTimeout(timer);
   }, []);
 
-  // Cleanup speech recognition on unmount
-  React.useEffect(() => {
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-    };
-  }, []);
   const normalizeText = (text: string): string => {
     return text
       .toLowerCase()
@@ -64,46 +55,7 @@ export default function TranslateLesson(): JSX.Element {
   };
 
   const handleMicClick = () => {
-    // If already listening, stop the current session
-    if (isListening && recognitionRef.current) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-      return;
-    }
-
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-      alert('Speech recognition is not supported in this browser. Please try Chrome or Edge.');
-      return;
-    }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    
-    recognition.lang = 'es-ES'; // Spanish language
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    // Store reference to current recognition instance
-    window.currentRecognition = recognition;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setAnswer(transcript);
-    };
-
-    recognition.onerror = (event) => {
-      if (event.error === 'no-speech') {
-        alert('No speech detected. Please try again.');
-      } else if (event.error === 'not-allowed') {
-        alert('Microphone access denied. Please allow microphone access and try again.');
-      } else {
-        console.error('Speech recognition error:', event.error);
-      }
-    };
-
-    recognition.onend = () => {
-    }
-    recognition.start();
+    console.log("record");
   };
 
   return (
