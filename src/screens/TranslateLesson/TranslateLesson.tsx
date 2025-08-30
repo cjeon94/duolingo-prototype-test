@@ -6,6 +6,7 @@ export default function TranslateLesson(): JSX.Element {
   const navigate = useNavigate();
   const [answer, setAnswer] = React.useState("");
   const [isListening, setIsListening] = React.useState(false);
+  const recognitionRef = React.useRef<SpeechRecognition | null>(null);
   
   const duoCharacters = [
     "/Duo Character 1.svg",
@@ -33,6 +34,14 @@ export default function TranslateLesson(): JSX.Element {
     return () => clearTimeout(timer);
   }, []);
 
+  // Cleanup speech recognition on unmount
+  React.useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
   const normalizeText = (text: string): string => {
     return text
       .toLowerCase()
@@ -56,6 +65,13 @@ export default function TranslateLesson(): JSX.Element {
   };
 
   const handleMicClick = () => {
+    // If currently listening, stop the recognition
+    if (isListening && window.currentRecognition) {
+      window.currentRecognition.stop();
+      setIsListening(false);
+      return;
+    }
+
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
       alert('Speech recognition is not supported in this browser. Please try Chrome or Edge.');
       return;
@@ -67,6 +83,9 @@ export default function TranslateLesson(): JSX.Element {
     recognition.lang = 'es-ES'; // Spanish language
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+
+    // Store reference to current recognition instance
+    window.currentRecognition = recognition;
 
     recognition.onstart = () => {
       setIsListening(true);
@@ -108,6 +127,7 @@ export default function TranslateLesson(): JSX.Element {
 
     recognition.onend = () => {
       setIsListening(false);
+      window.currentRecognition = null;
     };
 
     recognition.start();
