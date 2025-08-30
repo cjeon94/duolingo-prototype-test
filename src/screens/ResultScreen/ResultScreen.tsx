@@ -102,14 +102,6 @@ export default function ResultScreen(): JSX.Element {
             <div className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
               Review in 2 days
             </div>
-          )}
-        </div>
-          <div className="w-8 h-8 bg-[#ce82ff] rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-sm">6</span>
-          </div>
-          <span className="text-[#ce82ff] font-bold text-sm tracking-wider">LEVEL 6</span>
-        </div>
-
         {/* Main Content - Different layouts for correct vs incorrect */}
         {isCorrect ? (
           <div className="flex flex-col items-center justify-center h-[600px] px-6">
