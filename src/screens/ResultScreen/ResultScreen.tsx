@@ -1,6 +1,6 @@
 import React from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Share2 } from "lucide-react";
+import { Share2, X } from "lucide-react";
 
 export default function ResultScreen(): JSX.Element {
   const [searchParams] = useSearchParams();
@@ -79,9 +79,7 @@ export default function ResultScreen(): JSX.Element {
             className="w-8 h-8 flex items-center justify-center"
             onClick={() => navigate("/lesson/translate")}
           >
-            <svg width="20" height="20" viewBox="0 0 20 20" className="text-[#6b7280]">
-              <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
+            <X className="w-5 h-5 text-[#6b7280]" />
           </button>
           
           {/* Progress Bar */}
@@ -95,6 +93,14 @@ export default function ResultScreen(): JSX.Element {
               Review in 2 days
             </div>
           )}
+        </div>
+
+        {/* Level Badge */}
+        <div className="flex items-center gap-3 px-6 mb-8">
+          <div className="w-8 h-8 bg-[#ce82ff] rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-sm">6</span>
+          </div>
+          <span className="text-[#ce82ff] font-bold text-sm tracking-wider">LEVEL 6</span>
         </div>
 
         {/* Main Content - Different layouts for correct vs incorrect */}
@@ -140,11 +146,37 @@ export default function ResultScreen(): JSX.Element {
           </div>
         ) : (
           <div className="px-6 pb-40">
+            {/* Title */}
+            <h1 className="text-2xl font-bold text-[#4b4b4b] mb-8">
+              Translate this sentence
+            </h1>
+
+            {/* Character and Speech Bubble Row */}
+            <div className="flex items-start gap-4 mb-8">
+              {/* Duo Character */}
+              <div className="w-20 h-20 flex items-center justify-center flex-shrink-0">
+                <img 
+                  src={randomDuoCharacter} 
+                  alt="Duo character" 
+                  className="w-20 h-20 object-contain"
+                />
+              </div>
+              
+              {/* Speech Bubble */}
+              <div className="flex-1 relative">
+                <div className="bg-white border-2 border-[#e4e4e4] rounded-2xl p-4 shadow-sm relative">
+                  <div className="text-lg text-[#4b4b4b] font-medium">
+                    "Dear Ana, how are you?"
+                  </div>
+                  {/* Speech bubble tail */}
+                  <div className="absolute left-[-8px] top-6 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-[#e4e4e4]"></div>
+                  <div className="absolute left-[-6px] top-6 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[8px] border-r-white"></div>
+                </div>
+              </div>
+            </div>
+
             {/* User's Answer Textarea */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Your answer:
-              </label>
               <textarea
                 value={userAnswer ? decodeURIComponent(userAnswer) : ""}
                 disabled
@@ -160,9 +192,12 @@ export default function ResultScreen(): JSX.Element {
           <div className="absolute bottom-20 left-0 right-0 bg-red-50 border-t-2 border-red-200 p-4">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="text-lg font-bold text-red-700 mb-2">Incorrect</h3>
+                <div className="flex items-center gap-2 mb-2">
+                  <X className="w-5 h-5 text-red-600" />
+                  <h3 className="text-lg font-bold text-red-700">Incorrect</h3>
+                </div>
                 <div className="text-sm text-red-600 mb-1">Correct Answer:</div>
-                <div className="text-base font-medium text-red-800">
+                <div className="text-base font-medium text-red-800 underline">
                   {expected ? decodeURIComponent(expected) : ""}
                 </div>
               </div>
@@ -180,7 +215,11 @@ export default function ResultScreen(): JSX.Element {
         <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
           <button
             onClick={handleContinue}
-            className="w-full h-12 rounded-xl text-white font-semibold active:translate-y-[2px] transition-all bg-[#2ec748] shadow-[0_3px_0_#27aa3d]"
+            className="w-full h-12 rounded-xl text-white font-semibold active:translate-y-[2px] transition-all"
+            style={{
+              backgroundColor: isCorrect ? '#2ec748' : '#ff4757',
+              boxShadow: isCorrect ? '0 3px 0 #27aa3d' : '0 3px 0 #e74c3c'
+            }}
           >
             {isCorrect ? "CONTINUE" : "GOT IT"}
           </button>
